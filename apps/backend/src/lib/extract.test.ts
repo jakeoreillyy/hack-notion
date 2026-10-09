@@ -5,13 +5,17 @@ import type { AddressInfo } from "node:net";
 
 // Fake Messages API that always answers with `reply`. llm.ts builds its client on import, so point it here first.
 let reply: unknown;
+let stopReason = "end_turn";
 let calls = 0;
+let lastRequest: any;
 const server = http.createServer((req, res) => {
   calls++;
-  req.resume().on("end", () => {
+  let body = "";
+  req.on("data", (chunk) => (body += chunk)).on("end", () => {
+    lastRequest = JSON.parse(body);
     res.setHeader("content-type", "application/json");
     res.end(JSON.stringify({
-      id: "msg", type: "message", role: "assistant", model: "fake", stop_reason: "end_turn", stop_sequence: null,
+      id: "msg", type: "message", role: "assistant", model: "fake", stop_reason: stopReason, stop_sequence: null,
       content: [{ type: "text", text: JSON.stringify(reply) }], usage: { input_tokens: 0, output_tokens: 0 },
     }));
   });
@@ -26,11 +30,25 @@ const brief = "Write a 2,500-word report.\nGive a 10 minute “pitch” to the c
 const rubric = "Market analysis 25%\nPresentation delivery 15%";
 const criteria = [{ name: "Market analysis", weight: 25 }, { name: "Presentation delivery", weight: 15 }];
 const report = { title: "Report", criteria: ["Market analysis"], sourceLine: "Write a 2,500-word report." };
-const run = (r: unknown) => {
+const run = (r: unknown, stop = "end_turn") => {
   reply = r;
+  stopReason = stop;
   calls = 0;
   return extractBrief(brief, rubric);
 };
+
+test("asks the API for structured output in the extraction schema's shape", async () => {
+  await run({ criteria, deliverables: [report] });
+  assert.equal(lastRequest.output_config.format.type, "json_schema");
+  assert.deepEqual(lastRequest.output_config.format.schema.required, ["criteria", "deliverables"]);
+});
+
+test("fails fast, without a retry, when the model refuses or is cut off", async () => {
+  for (const stop of ["refusal", "max_tokens"]) {
+    await assert.rejects(run({ criteria, deliverables: [report] }, stop), new RegExp(stop));
+    assert.equal(calls, 1);
+  }
+});
 
 test("maps criterion names to ids and keeps the rubric's weights", async () => {
   assert.deepEqual(await run({ criteria, deliverables: [report] }), {
