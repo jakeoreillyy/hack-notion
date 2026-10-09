@@ -5,3 +5,4 @@ next-env.d.ts
 .env.local
 apps/backend/data/projects.json
 *.tsbuildinfo
+apps/backend/data/notion.json
