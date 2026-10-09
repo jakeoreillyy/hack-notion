@@ -76,7 +76,8 @@ export function createProjectsRouter(store: Store, deps: Deps): Router {
     try {
       const extracted = await deps.extractBrief(body.brief, body.rubric);
       criteria = extracted.criteria;
-      tasks = await deps.decompose(extracted.criteria, extracted.deliverables);
+      tasks = await deps.decompose(extracted.criteria, extracted.deliverables, [body.brief, body.rubric].join("
+"));
     } catch (e) {
       throw new HttpError(502, `Couldn't read the brief: ${message(e)}`);
     }

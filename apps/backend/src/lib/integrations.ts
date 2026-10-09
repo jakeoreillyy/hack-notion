@@ -6,7 +6,8 @@ import type { Change, Criterion, Deliverable, Notification, Project, Status, Tas
 
 export type Deps = {
   extractBrief(brief: string, rubric: string): Promise<{ criteria: Criterion[]; deliverables: Deliverable[] }>;
-  decompose(criteria: Criterion[], deliverables: Deliverable[]): Promise<Task[]>;
+  /** sourceText is the brief and rubric joined with a newline; task source lines are quoted from it. */
+  decompose(criteria: Criterion[], deliverables: Deliverable[], sourceText: string): Promise<Task[]>;
   findNotifications(tasks: Task[], today: string): Notification[];
   createWorkspace(project: Project): Promise<string>;
   applyChanges(project: Project, changes: Change[]): Promise<void>;
