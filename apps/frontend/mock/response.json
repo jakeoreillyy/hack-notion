@@ -1,23 +1,73 @@
 {
-  "projectId": "p_1",
-  "state": "draft",
-  "criteria": [
-    { "id": "c1", "name": "Market analysis", "weight": 25 },
-    { "id": "c2", "name": "Presentation delivery", "weight": 15 },
-    { "id": "c3", "name": "Critical evaluation of sources", "weight": 15 }
-  ],
-  "tasks": [
-    { "id": "t1", "title": "Collect competitor data", "criterionIds": ["c1"], "owner": "Alex", "estimateH": 4, "confidence": "medium", "start": "2026-10-12", "due": "2026-10-16", "dependsOn": [], "status": "todo", "requiredSkills": ["research"], "sourceLine": "Students must analyse at least three competitors." },
-    { "id": "t2", "title": "Analyse competitor data", "criterionIds": ["c1"], "owner": "Sam", "estimateH": 6, "confidence": "low", "start": "2026-10-19", "due": "2026-10-23", "dependsOn": ["t1"], "status": "doing", "requiredSkills": ["data"], "sourceLine": "Students must analyse at least three competitors." },
-    { "id": "t3", "title": "Build presentation slides", "criterionIds": ["c2"], "owner": "Jo", "estimateH": 5, "confidence": "medium", "start": "2026-10-26", "due": "2026-10-30", "dependsOn": ["t2"], "status": "todo", "requiredSkills": ["design", "presenting"], "sourceLine": "Produce a presentation." }
-  ],
-  "load": [
-    { "member": "Alex", "plannedH": 4, "availableH": 32 },
-    { "member": "Sam", "plannedH": 6, "availableH": 24 },
-    { "member": "Jo", "plannedH": 5, "availableH": 40 }
-  ],
-  "coverageGaps": [{ "criterionId": "c3", "name": "Critical evaluation of sources" }],
-  "risks": [{ "type": "low_slack", "detail": "Slides depend on analysis, due 3 days before deadline." }],
-  "notionUrl": null,
-  "warnings": []
+  "_about": "Hand-written fake API responses matching CONTRACT.md. Role 3 builds screens against these until the real /api endpoints exist. Set planView.state to \"confirmed\" to see the dashboard.",
+
+  "planView": {
+    "projectId": "p_1",
+    "state": "draft",
+    "criteria": [
+      { "id": "c1", "name": "Market analysis", "weight": 25 },
+      { "id": "c2", "name": "Marketing strategy", "weight": 25 },
+      { "id": "c3", "name": "Critical evaluation of sources", "weight": 15 },
+      { "id": "c4", "name": "Report structure and writing", "weight": 20 },
+      { "id": "c5", "name": "Presentation delivery", "weight": 15 }
+    ],
+    "tasks": [
+      { "id": "t1", "title": "Collect competitor data", "criterionIds": ["c1"], "owner": "Alex", "estimateH": 4, "confidence": "medium", "start": "2026-10-12", "due": "2026-10-14", "dependsOn": [], "status": "done", "requiredSkills": ["research"], "sourceLine": "Students must analyse at least three competitors." },
+      { "id": "t2", "title": "Analyse market size data", "criterionIds": ["c1"], "owner": "Priya", "estimateH": 6, "confidence": "low", "start": "2026-10-15", "due": "2026-10-20", "dependsOn": ["t1"], "status": "doing", "requiredSkills": ["data"], "sourceLine": "The report should estimate the size of the target market using published data." },
+      { "id": "t3", "title": "Draft survey questions", "criterionIds": ["c1"], "owner": "Sam", "estimateH": 3, "confidence": "high", "start": "2026-10-14", "due": "2026-10-16", "dependsOn": [], "status": "todo", "requiredSkills": ["research", "writing"], "sourceLine": "Include primary research with at least 20 respondents." },
+      { "id": "t4", "title": "Run customer survey", "criterionIds": ["c1"], "owner": "Sam", "estimateH": 5, "confidence": "medium", "start": "2026-10-19", "due": "2026-10-22", "dependsOn": ["t3"], "status": "todo", "requiredSkills": ["research"], "sourceLine": "Include primary research with at least 20 respondents." },
+      { "id": "t5", "title": "Write SWOT analysis", "criterionIds": ["c2"], "owner": "Sam", "estimateH": 6, "confidence": "medium", "start": "2026-10-21", "due": "2026-10-23", "dependsOn": ["t2"], "status": "todo", "requiredSkills": ["writing"], "sourceLine": "Present a SWOT analysis of the chosen brand." },
+      { "id": "t6", "title": "Define target segments", "criterionIds": ["c2"], "owner": "Jo", "estimateH": 4, "confidence": "medium", "start": "2026-10-21", "due": "2026-10-22", "dependsOn": ["t2"], "status": "todo", "requiredSkills": ["research", "data"], "sourceLine": "Identify and justify two target segments." },
+      { "id": "t7", "title": "Chart survey results", "criterionIds": ["c1", "c2"], "owner": "Priya", "estimateH": 3, "confidence": "high", "start": "2026-10-23", "due": "2026-10-26", "dependsOn": ["t4"], "status": "todo", "requiredSkills": ["data", "design"], "sourceLine": "Findings should be supported with clear charts or tables." },
+      { "id": "t8", "title": "Write marketing mix (4Ps) section", "criterionIds": ["c2"], "owner": "Jo", "estimateH": 8, "confidence": "low", "start": "2026-10-26", "due": "2026-10-29", "dependsOn": ["t5", "t6"], "status": "todo", "requiredSkills": ["writing"], "sourceLine": "Recommend a marketing mix for the next 12 months." },
+      { "id": "t9", "title": "Write introduction and conclusion", "criterionIds": ["c4"], "owner": "Sam", "estimateH": 4, "confidence": "medium", "start": "2026-10-28", "due": "2026-10-30", "dependsOn": ["t8"], "status": "todo", "requiredSkills": ["writing"], "sourceLine": "The report must be 2,500 words with a clear introduction and conclusion." },
+      { "id": "t10", "title": "Edit and proofread full report", "criterionIds": ["c4"], "owner": "Ciara", "estimateH": 5, "confidence": "medium", "start": "2026-10-30", "due": "2026-11-03", "dependsOn": ["t9"], "status": "todo", "requiredSkills": ["editing"], "sourceLine": "Marks are awarded for clarity, structure and accurate referencing." },
+      { "id": "t11", "title": "Design presentation slides", "criterionIds": ["c5"], "owner": "Alex", "estimateH": 6, "confidence": "medium", "start": "2026-10-28", "due": "2026-11-02", "dependsOn": ["t7", "t8"], "status": "todo", "requiredSkills": ["design", "presenting"], "sourceLine": "Each group will deliver a 10-minute presentation of their findings." },
+      { "id": "t12", "title": "Rehearse group presentation", "criterionIds": ["c5"], "owner": "Ciara", "estimateH": 3, "confidence": "high", "start": "2026-11-03", "due": "2026-11-04", "dependsOn": ["t11"], "status": "todo", "requiredSkills": ["presenting"], "sourceLine": "All members must take part in the presentation." },
+      { "id": "t13", "title": "Format references and appendix", "criterionIds": ["c4"], "owner": "Ciara", "estimateH": 2, "confidence": "high", "start": "2026-11-02", "due": "2026-11-03", "dependsOn": ["t9"], "status": "todo", "requiredSkills": ["editing"], "sourceLine": "Use Harvard referencing throughout." }
+    ],
+    "load": [
+      { "member": "Alex", "plannedH": 10, "availableH": 30.4 },
+      { "member": "Ciara", "plannedH": 10, "availableH": 24 },
+      { "member": "Jo", "plannedH": 12, "availableH": 20 },
+      { "member": "Priya", "plannedH": 9, "availableH": 24 },
+      { "member": "Sam", "plannedH": 18, "availableH": 15.2 }
+    ],
+    "coverageGaps": [
+      { "criterionId": "c3", "name": "Critical evaluation of sources" }
+    ],
+    "risks": [
+      { "type": "overload", "detail": "Sam has 18 planned hours but 15.2 available before the deadline." },
+      { "type": "low_slack", "detail": "Rehearsal depends on the slides and is due 2 days before the deadline." }
+    ],
+    "notionUrl": null,
+    "warnings": []
+  },
+
+  "notifications": {
+    "_today": "2026-10-14",
+    "notifications": [
+      { "taskId": "t3", "owner": "Sam", "message": "'Draft survey questions' is due in 2 days and hasn't been started.", "daysLeft": 2 }
+    ],
+    "warnings": []
+  },
+
+  "replanProposal": {
+    "_request": { "change": { "type": "unavailable", "member": "Sam", "from": "2026-10-19", "to": "2026-10-23" } },
+    "proposalId": "pr_1",
+    "changes": [
+      { "taskId": "t4", "field": "owner", "from": "Sam", "to": "Alex" },
+      { "taskId": "t4", "field": "due", "from": "2026-10-22", "to": "2026-10-23" },
+      { "taskId": "t5", "field": "owner", "from": "Sam", "to": "Jo" }
+    ],
+    "loadAfter": [
+      { "member": "Alex", "plannedH": 15, "availableH": 30.4 },
+      { "member": "Ciara", "plannedH": 10, "availableH": 24 },
+      { "member": "Jo", "plannedH": 18, "availableH": 20 },
+      { "member": "Priya", "plannedH": 9, "availableH": 24 },
+      { "member": "Sam", "plannedH": 7, "availableH": 11.2 }
+    ],
+    "explanation": "Sam is unavailable from 2026-10-19 to 2026-10-23, so 'Run customer survey' moves from Sam to Alex and is now due 2026-10-23, and 'Write SWOT analysis' moves from Sam to Jo.",
+    "warnings": []
+  }
 }
