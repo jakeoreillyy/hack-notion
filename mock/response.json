@@ -1,0 +1,23 @@
+{
+  "projectId": "p_1",
+  "state": "draft",
+  "criteria": [
+    { "id": "c1", "name": "Market analysis", "weight": 25 },
+    { "id": "c2", "name": "Presentation delivery", "weight": 15 },
+    { "id": "c3", "name": "Critical evaluation of sources", "weight": 15 }
+  ],
+  "tasks": [
+    { "id": "t1", "title": "Collect competitor data", "criterionIds": ["c1"], "owner": "Alex", "estimateH": 4, "confidence": "medium", "start": "2026-10-12", "due": "2026-10-16", "dependsOn": [], "status": "todo", "requiredSkills": ["research"], "sourceLine": "Students must analyse at least three competitors." },
+    { "id": "t2", "title": "Analyse competitor data", "criterionIds": ["c1"], "owner": "Sam", "estimateH": 6, "confidence": "low", "start": "2026-10-19", "due": "2026-10-23", "dependsOn": ["t1"], "status": "doing", "requiredSkills": ["data"], "sourceLine": "Students must analyse at least three competitors." },
+    { "id": "t3", "title": "Build presentation slides", "criterionIds": ["c2"], "owner": "Jo", "estimateH": 5, "confidence": "medium", "start": "2026-10-26", "due": "2026-10-30", "dependsOn": ["t2"], "status": "todo", "requiredSkills": ["design", "presenting"], "sourceLine": "Produce a presentation." }
+  ],
+  "load": [
+    { "member": "Alex", "plannedH": 4, "availableH": 32 },
+    { "member": "Sam", "plannedH": 6, "availableH": 24 },
+    { "member": "Jo", "plannedH": 5, "availableH": 40 }
+  ],
+  "coverageGaps": [{ "criterionId": "c3", "name": "Critical evaluation of sources" }],
+  "risks": [{ "type": "low_slack", "detail": "Slides depend on analysis, due 3 days before deadline." }],
+  "notionUrl": null,
+  "warnings": []
+}

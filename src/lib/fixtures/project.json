@@ -1,0 +1,24 @@
+{
+  "id": "p_fixture",
+  "state": "draft",
+  "brief": "Students must analyse at least three competitors. Produce a 2,500-word report and a presentation.",
+  "rubric": "Market analysis (25%). Critical evaluation of sources (15%). Presentation delivery (15%).",
+  "deadline": "2026-11-06",
+  "members": [
+    { "name": "Alex", "hoursPerWeek": 8, "skills": ["research", "writing"], "blocked": ["2026-10-20"] },
+    { "name": "Sam", "hoursPerWeek": 6, "skills": ["data", "presenting"], "blocked": [] },
+    { "name": "Jo", "hoursPerWeek": 10, "skills": ["design", "editing", "writing"], "blocked": [] }
+  ],
+  "criteria": [
+    { "id": "c1", "name": "Market analysis", "weight": 25 },
+    { "id": "c2", "name": "Presentation delivery", "weight": 15 },
+    { "id": "c3", "name": "Critical evaluation of sources", "weight": 15 }
+  ],
+  "tasks": [
+    { "id": "t1", "title": "Collect competitor data", "criterionIds": ["c1"], "owner": "Alex", "estimateH": 4, "confidence": "medium", "start": "2026-10-12", "due": "2026-10-16", "dependsOn": [], "status": "todo", "requiredSkills": ["research"], "sourceLine": "Students must analyse at least three competitors." },
+    { "id": "t2", "title": "Analyse competitor data", "criterionIds": ["c1"], "owner": "Sam", "estimateH": 6, "confidence": "low", "start": "2026-10-19", "due": "2026-10-23", "dependsOn": ["t1"], "status": "todo", "requiredSkills": ["data"], "sourceLine": "Students must analyse at least three competitors." },
+    { "id": "t3", "title": "Build presentation slides", "criterionIds": ["c2"], "owner": "Jo", "estimateH": 5, "confidence": "medium", "start": "2026-10-26", "due": "2026-10-30", "dependsOn": ["t2"], "status": "todo", "requiredSkills": ["design", "presenting"], "sourceLine": "Produce a presentation." }
+  ],
+  "notionUrl": null,
+  "proposals": {}
+}
