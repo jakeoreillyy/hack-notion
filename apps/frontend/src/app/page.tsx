@@ -2,14 +2,22 @@
 
 // Role 3: input page
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { CreateProjectRequest, Member } from "@contract";
+import { AppHeader } from "@/components/AppHeader";
 import { MemberCard } from "@/components/MemberCard";
 import { createProject, USE_MOCK } from "@/lib/api";
 import { todayISO } from "@/lib/dates";
-import { DEMO_INPUT } from "@/lib/demoInput";
+import { DEMO_INPUT, DEMO_PROJECT_ID } from "@/lib/demoInput";
 
 const emptyMember = (): Member => ({ name: "", hoursPerWeek: 5, skills: [], blocked: [] });
+
+const PROMISES = [
+  "Every task linked to a rubric mark",
+  "Work shared by each person's real availability",
+  "A draft you edit before anything is saved",
+];
 
 function validate(req: CreateProjectRequest): string[] {
   const errors: string[] = [];
@@ -47,6 +55,8 @@ export default function InputPage() {
     deadline,
     members: members.map((m) => ({ ...m, name: m.name.trim() })),
   };
+  // Colours follow alphabetical order so each person keeps theirs on later screens.
+  const sortedNames = req.members.map((m) => m.name).filter(Boolean).sort();
 
   const fillDemo = () => {
     setBrief(DEMO_INPUT.brief);
@@ -76,105 +86,119 @@ export default function InputPage() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-50 px-4 py-10 text-slate-900">
-      <div className="mx-auto max-w-3xl">
-        <header className="flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <h1 className="text-2xl font-semibold tracking-tight">Group Project Autopilot</h1>
-            <p className="mt-1 text-slate-600">
-              Paste your brief and add your team. You&apos;ll get a draft plan to review before anything is saved.
-            </p>
+    <>
+      <AppHeader step={1} />
+      <main className="mx-auto max-w-4xl px-4 pb-16 pt-10">
+        <section className="flex flex-wrap items-end justify-between gap-6">
+          <div className="max-w-2xl">
+            <p className="text-sm font-semibold text-indigo-600">For student group projects</p>
+            <h1 className="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+              Turn your assignment brief into a fair team plan.
+            </h1>
+            <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-1.5 text-sm text-slate-600">
+              {PROMISES.map((p) => (
+                <li key={p} className="flex items-center gap-1.5">
+                  <span className="text-emerald-600">✓</span>
+                  {p}
+                </li>
+              ))}
+            </ul>
           </div>
-          <button
-            type="button"
-            onClick={fillDemo}
-            className="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-100"
-          >
-            Fill with demo data
-          </button>
-        </header>
+          <div className="flex flex-col items-end gap-2">
+            <button type="button" onClick={fillDemo} className="btn-secondary">
+              Fill with demo data
+            </button>
+            {!USE_MOCK && (
+              <Link href={`/projects/${DEMO_PROJECT_ID}`} className="text-xs font-medium text-indigo-600 hover:underline">
+                or open the ready-made MK301 demo →
+              </Link>
+            )}
+          </div>
+        </section>
 
-        {USE_MOCK && (
-          <p className="mt-6 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800">
-            Using fake data: the plan you&apos;ll see comes from <code>mock/response.json</code>, not the backend.
-          </p>
-        )}
-
-        <form onSubmit={submit} className="mt-6 space-y-8" noValidate>
-          <section className="space-y-4">
-            <h2 className="text-lg font-medium">1. The assignment</h2>
-            <div>
-              <label htmlFor="brief" className="text-sm font-medium text-slate-700">
-                Assignment brief
-              </label>
-              <textarea
-                id="brief"
-                rows={8}
-                className="input mt-1"
-                placeholder="Paste the full brief from your lecturer…"
-                value={brief}
-                onChange={(e) => setBrief(e.target.value)}
-              />
+        <form onSubmit={submit} className="mt-10 space-y-6" noValidate>
+          <section className="card p-6">
+            <SectionHeading n={1} title="The assignment" hint="Paste the text straight from your module page." />
+            <div className="mt-5 grid gap-5 md:grid-cols-2">
+              <div>
+                <label htmlFor="brief" className="text-sm font-medium text-slate-700">
+                  Assignment brief
+                </label>
+                <textarea
+                  id="brief"
+                  rows={10}
+                  className="input mt-1.5 resize-y leading-relaxed"
+                  placeholder="Paste the full brief from your lecturer…"
+                  value={brief}
+                  onChange={(e) => setBrief(e.target.value)}
+                />
+              </div>
+              <div>
+                <label htmlFor="rubric" className="text-sm font-medium text-slate-700">
+                  Marking rubric
+                </label>
+                <textarea
+                  id="rubric"
+                  rows={10}
+                  className="input mt-1.5 resize-y leading-relaxed"
+                  placeholder="Paste the marking criteria and their weights…"
+                  value={rubric}
+                  onChange={(e) => setRubric(e.target.value)}
+                />
+              </div>
             </div>
-            <div>
-              <label htmlFor="rubric" className="text-sm font-medium text-slate-700">
-                Marking rubric
-              </label>
-              <textarea
-                id="rubric"
-                rows={6}
-                className="input mt-1"
-                placeholder="Paste the marking criteria and their weights…"
-                value={rubric}
-                onChange={(e) => setRubric(e.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor="deadline" className="text-sm font-medium text-slate-700">
-                Deadline
-              </label>
-              <input
-                id="deadline"
-                type="date"
-                className="input mt-1 w-48"
-                min={todayISO()}
-                value={deadline}
-                onChange={(e) => setDeadline(e.target.value)}
-              />
+            <div className="mt-5 flex flex-wrap items-end gap-3">
+              <div>
+                <label htmlFor="deadline" className="text-sm font-medium text-slate-700">
+                  Deadline
+                </label>
+                <input
+                  id="deadline"
+                  type="date"
+                  className="input mt-1.5 w-48"
+                  min={todayISO()}
+                  value={deadline}
+                  onChange={(e) => setDeadline(e.target.value)}
+                />
+              </div>
+              <p className="pb-2 text-xs text-slate-500">We plan backwards from this date, with a 2-day buffer.</p>
             </div>
           </section>
 
-          <section className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-medium">2. The team</h2>
-              <span className="text-sm text-slate-500">
+          <section className="card p-6">
+            <div className="flex items-start justify-between gap-4">
+              <SectionHeading n={2} title="The team" hint="Hours and days off decide how work is shared." />
+              <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600">
                 {members.length} {members.length === 1 ? "member" : "members"}
               </span>
             </div>
-            {members.map((member, i) => (
-              <MemberCard
-                key={i}
-                member={member}
-                index={i}
-                deadline={deadline}
-                canRemove={members.length > 1}
-                onChange={(m) => updateMember(i, m)}
-                onRemove={() => setMembers((ms) => ms.filter((_, j) => j !== i))}
-              />
-            ))}
-            <button
-              type="button"
-              onClick={() => setMembers((ms) => [...ms, emptyMember()])}
-              className="w-full rounded-lg border border-dashed border-slate-300 py-3 text-sm text-slate-600 hover:border-slate-400 hover:bg-white"
-            >
-              + Add member
-            </button>
+            <div className="mt-5 space-y-3">
+              {members.map((member, i) => (
+                <MemberCard
+                  key={i}
+                  member={member}
+                  index={i}
+                  colorIndex={sortedNames.indexOf(member.name.trim())}
+                  deadline={deadline}
+                  canRemove={members.length > 1}
+                  onChange={(m) => updateMember(i, m)}
+                  onRemove={() => setMembers((ms) => ms.filter((_, j) => j !== i))}
+                />
+              ))}
+              <button
+                type="button"
+                onClick={() => setMembers((ms) => [...ms, emptyMember()])}
+                className="w-full rounded-xl border-2 border-dashed border-slate-200 py-3 text-sm font-medium text-slate-500 transition hover:border-indigo-300 hover:bg-indigo-50/50 hover:text-indigo-700"
+              >
+                + Add member
+              </button>
+            </div>
           </section>
 
           {errors.length > 0 && (
-            <div role="alert" className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
-              <p className="font-medium">Fix these before making the plan:</p>
-              <ul className="mt-1 list-disc pl-5">
+            <div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-800">
+              <p className="font-semibold">Fix these before making the plan:</p>
+              <ul className="mt-1.5 list-disc space-y-0.5 pl-5">
                 {errors.map((err) => (
                   <li key={err}>{err}</li>
                 ))}
@@ -182,27 +206,49 @@ export default function InputPage() {
             </div>
           )}
 
-          <div className="flex items-center justify-end gap-4 border-t border-slate-200 pt-6">
-            <p className="text-sm text-slate-500">Estimates are guesses. You can edit everything next.</p>
-            <button
-              type="submit"
-              disabled={submitting}
-              className="rounded-md bg-indigo-600 px-5 py-2.5 font-medium text-white hover:bg-indigo-700 disabled:opacity-60"
-            >
-              {submitting ? "Making plan…" : "Make draft plan"}
+          <div className="card flex flex-wrap items-center justify-between gap-4 px-6 py-4">
+            <p className="text-sm text-slate-500">Estimates are guesses. You can edit everything on the next screen.</p>
+            <button type="submit" disabled={submitting} className="btn-primary px-6">
+              {submitting ? (
+                <>
+                  <Spinner /> Making plan…
+                </>
+              ) : (
+                <>Make draft plan →</>
+              )}
             </button>
           </div>
         </form>
 
         {USE_MOCK && (
-          <details className="mt-8 text-sm">
-            <summary className="cursor-pointer text-slate-500">Data this form sends (POST /api/projects)</summary>
-            <pre className="mt-2 overflow-x-auto rounded-md bg-slate-900 p-4 text-xs text-slate-100">
+          <details className="mt-10 text-sm">
+            <summary className="cursor-pointer text-slate-400 hover:text-slate-600">
+              Developer: data this form sends (POST /api/projects)
+            </summary>
+            <pre className="mt-2 overflow-x-auto rounded-xl bg-slate-900 p-4 text-xs text-slate-100">
               {JSON.stringify(req, null, 2)}
             </pre>
           </details>
         )}
-      </div>
-    </main>
+      </main>
+    </>
   );
+}
+
+function SectionHeading({ n, title, hint }: { n: number; title: string; hint: string }) {
+  return (
+    <div className="flex items-start gap-3">
+      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-indigo-50 text-sm font-semibold text-indigo-700">
+        {n}
+      </span>
+      <div>
+        <h2 className="section-title">{title}</h2>
+        <p className="mt-0.5 text-sm text-slate-500">{hint}</p>
+      </div>
+    </div>
+  );
+}
+
+function Spinner() {
+  return <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" aria-hidden />;
 }

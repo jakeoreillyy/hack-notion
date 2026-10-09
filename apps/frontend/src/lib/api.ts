@@ -4,7 +4,7 @@ import mock from "../../mock/response.json";
 import { addDays, daysBetween, formatDay, todayISO } from "./dates";
 
 // true: pages use mock/response.json. Flip to false once apps/backend serves real data.
-export const USE_MOCK = true;
+export const USE_MOCK = false;
 
 export type Unavailability = { member: string; from: string; to: string };
 
@@ -142,18 +142,42 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 
 // ---- Calls used by the pages ---------------------------------------------------------------
 
+// Warnings only come back on the response that caused them, but the start page navigates away and
+// the plan page loads the plan again. Keep the create-time warnings for this tab's session.
+const warningsKey = (id: string) => `autopilot-warnings:${id}`;
+
+function handOverWarnings(plan: PlanView) {
+  if (plan.warnings.length === 0) return;
+  try {
+    sessionStorage.setItem(warningsKey(plan.projectId), JSON.stringify(plan.warnings));
+  } catch {}
+}
+
+function takeWarnings(plan: PlanView): PlanView {
+  try {
+    const saved = sessionStorage.getItem(warningsKey(plan.projectId));
+    if (!saved) return plan;
+    const extra = (JSON.parse(saved) as string[]).filter((w) => !plan.warnings.includes(w));
+    return { ...plan, warnings: [...plan.warnings, ...extra] };
+  } catch {
+    return plan;
+  }
+}
+
 export async function createProject(req: CreateProjectRequest): Promise<PlanView> {
   if (USE_MOCK) {
     console.log("[mock] POST /api/projects", req);
     await delay(600);
     return saveMock(freshMock());
   }
-  return request<PlanView>("/api/projects", { method: "POST", body: JSON.stringify(req) });
+  const plan = await request<PlanView>("/api/projects", { method: "POST", body: JSON.stringify(req) });
+  handOverWarnings(plan);
+  return plan;
 }
 
 export async function getProject(id: string): Promise<PlanView> {
   if (USE_MOCK) return loadMock();
-  return request<PlanView>(`/api/projects/${id}`);
+  return takeWarnings(await request<PlanView>(`/api/projects/${id}`));
 }
 
 export async function updatePlan(id: string, tasks: Task[]): Promise<PlanView> {
