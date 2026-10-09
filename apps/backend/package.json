@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test \"src/**/*.test.ts\"",
+    "notion:smoke": "tsx --env-file=.env src/notionSmoke.ts"
   },
   "dependencies": {
     "@notionhq/client": "^5.27.0",
