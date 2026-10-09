@@ -4,19 +4,20 @@
 // Only the absent member's open tasks that overlap the absence are touched. Done and in-progress
 // tasks, and everyone else's tasks, are never edited. For each affected task, in start order:
 //   1. Reassign to a member with the skills who isn't blocked in the task's window, has enough free
-//      hours in that window, and stays within capacity (lowest load, then alphabetical).
+//      hours in that window, and stays within capacity (lowest (planned + task) / available hours,
+//      then alphabetical).
 //   2. Otherwise push: keep the owner and extend the due date until they get back the working days
 //      they lost, as long as it stays on or before the deadline.
 //   3. Otherwise give it to a skilled, unblocked member even if that overloads them, with a warning.
 import type { Change, Load, Member, Project, Task } from "../schemas";
 import { computeLoad } from "./analysis";
-import { BUFFER_DAYS } from "./scheduler";
+import { BUFFER_DAYS, loadRatio } from "./scheduler";
 import { addDays, addWorkingDays, byId, dailyHours, freeDays, isBlockedBetween, isWeekday, weekdaysBetween } from "./dates";
 
 export type Unavailable = { type: "unavailable"; member: string; from: string; to: string };
 export type ReplanResult = { changes: Change[]; loadAfter: Load[]; explanation: string; warnings: string[] };
 
-type ReplanInput = Pick<Project, "members" | "tasks" | "deadline">;
+type ReplanInput = Pick<Project, "members" | "tasks" | "deadline"> & { startDate?: string };
 
 export function proposeReplan(project: ReplanInput, change: Unavailable): ReplanResult {
   const { name, from, to } = { name: change.member, from: change.from, to: change.to };
@@ -52,7 +53,7 @@ export function proposeReplan(project: ReplanInput, change: Unavailable): Replan
   const stuck: Task[] = [];
 
   for (const task of affected) {
-    const loadNow = computeLoad(members, tasks, project.deadline);
+    const loadNow = computeLoad(members, tasks, project.deadline, project.startDate);
     const skilled = members.filter(
       (m) =>
         m.name !== name &&
@@ -65,7 +66,7 @@ export function proposeReplan(project: ReplanInput, change: Unavailable): Replan
       return freeHoursInWindow(m, task, tasks) >= task.estimateH && l.plannedH + task.estimateH <= l.availableH;
     });
 
-    const best = lowestLoad(fits, loadNow);
+    const best = lowestLoad(fits, loadNow, task);
     if (best) {
       reassign(task, best, changes, moved);
       continue;
@@ -83,7 +84,7 @@ export function proposeReplan(project: ReplanInput, change: Unavailable): Replan
       continue;
     }
 
-    const fallback = lowestLoad(skilled, loadNow);
+    const fallback = lowestLoad(skilled, loadNow, task);
     if (fallback) {
       warnings.push(`Nobody has spare time for "${task.title}"; giving it to ${fallback.name} puts them over capacity.`);
       reassign(task, fallback, changes, moved);
@@ -94,8 +95,8 @@ export function proposeReplan(project: ReplanInput, change: Unavailable): Replan
   }
 
   // loadAfter lists only members whose numbers changed.
-  const before = computeLoad(project.members, project.tasks, project.deadline);
-  const loadAfter = computeLoad(members, tasks, project.deadline).filter((l) => {
+  const before = computeLoad(project.members, project.tasks, project.deadline, project.startDate);
+  const loadAfter = computeLoad(members, tasks, project.deadline, project.startDate).filter((l) => {
     const b = before.find((x) => x.member === l.member)!;
     return b.plannedH !== l.plannedH || b.availableH !== l.availableH;
   });
@@ -127,8 +128,11 @@ function reassign(task: Task, to: Member, changes: Change[], moved: { task: Task
   task.owner = to.name;
 }
 
-function lowestLoad(pool: Member[], load: Load[]): Member | undefined {
-  const ratio = (m: Member) => load.find((l) => l.member === m.name)!.plannedH / m.hoursPerWeek;
+function lowestLoad(pool: Member[], load: Load[], task: Task): Member | undefined {
+  const ratio = (m: Member) => {
+    const l = load.find((x) => x.member === m.name)!;
+    return loadRatio(l.plannedH + task.estimateH, l.availableH);
+  };
   return [...pool].sort((a, b) => ratio(a) - ratio(b) || a.name.localeCompare(b.name))[0];
 }
 

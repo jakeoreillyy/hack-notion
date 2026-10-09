@@ -5,8 +5,11 @@ import { fileURLToPath } from "node:url";
 import type { Project } from "../schemas";
 import type { Unavailable } from "./replan";
 
-/** Project plus what the store needs to confirm a replan later: the change each proposal answered. */
-export type StoredProject = Project & { replanRequests: Record<string, Unavailable> };
+/**
+ * Project plus what only the server needs: the day planning started (pins the capacity window) and
+ * the change each open replan proposal answered (needed to confirm it).
+ */
+export type StoredProject = Project & { startDate: string; replanRequests: Record<string, Unavailable> };
 
 export type Store = ReturnType<typeof createStore>;
 

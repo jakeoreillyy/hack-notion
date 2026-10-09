@@ -5,10 +5,10 @@
 // 2. Walk backwards from the deadline minus a 2 working-day buffer: each task is due the working day
 //    before its earliest dependent starts.
 // 3. Owner = has every required skill, then free (no blocked day in the window), then lowest load
-//    (planned hours / weekly hours), then alphabetical.
+//    ((planned + this task's hours) / available hours, so blocked days count), then alphabetical.
 // 4. Start = due minus the task's length in the owner's free working days (estimate / daily hours).
 import type { Member, Task } from "../schemas";
-import { addWorkingDays, byId, dailyHours, isBlockedBetween, isWeekday, prevWorkingDay } from "./dates";
+import { addWorkingDays, availableHours, byId, dailyHours, isBlockedBetween, isWeekday, prevWorkingDay } from "./dates";
 
 export const BUFFER_DAYS = 2;
 
@@ -36,6 +36,9 @@ export function scheduleWithWarnings(
 
   const lastDue = addWorkingDays(deadline, -BUFFER_DAYS);
   const load = new Map(members.map((m) => [m.name, 0]));
+  // Without today, assume the usual 4-week project so the result still never depends on the clock.
+  const windowStart = today ?? addWorkingDays(deadline, -20);
+  const available = new Map(members.map((m) => [m.name, availableHours(m, windowStart, deadline)]));
   for (const t of out) if (isLocked(t)) load.set(t.owner!, (load.get(t.owner!) ?? 0) + t.estimateH);
 
   // Reverse topological order: every dependent is scheduled before the tasks it depends on.
@@ -48,7 +51,7 @@ export function scheduleWithWarnings(
       if (dep.start && prevWorkingDay(dep.start) < latest) latest = prevWorkingDay(dep.start);
     }
 
-    const owner = pickOwner(task, members, load, latest, warnings);
+    const owner = pickOwner(task, members, load, available, latest, warnings);
     if (!owner) {
       warnings.push(`No team member can take "${task.title}"; left unassigned.`);
       Object.assign(task, { owner: null, start: null, due: null });
@@ -104,6 +107,10 @@ function startNoEarlierThan(today: string, tasks: Task[], members: Member[], las
   }
 }
 
+/** Planned / available hours. No available time at all sorts last. */
+export const loadRatio = (plannedH: number, availableH: number) =>
+  availableH > 0 ? plannedH / availableH : Number.POSITIVE_INFINITY;
+
 /** Tasks already started, finished or fully placed by the team are kept as they are. */
 const isLocked = (t: Task) => t.status !== "todo" && t.owner !== null && t.start !== null && t.due !== null;
 
@@ -131,6 +138,7 @@ function pickOwner(
   task: Task,
   members: Member[],
   load: Map<string, number>,
+  available: Map<string, number>,
   latest: string,
   warnings: string[],
 ): Member | null {
@@ -150,7 +158,7 @@ function pickOwner(
   });
   if (free.length > 0) pool = free;
 
-  const ratio = (m: Member) => load.get(m.name)! / m.hoursPerWeek;
+  const ratio = (m: Member) => loadRatio(load.get(m.name)! + task.estimateH, available.get(m.name)!);
   return [...pool].sort((a, b) => ratio(a) - ratio(b) || a.name.localeCompare(b.name))[0];
 }
 

@@ -124,7 +124,7 @@ test("analyse: finds Mia's overload, the c4 gap and the low-slack rehearsal", ()
 
 test("analyse: flags unassigned tasks and broken dependency dates", () => {
   const tasks = project.tasks.map((t) =>
-    t.id === "t20" ? { ...t, owner: null } : t.id === "t8" ? { ...t, start: "2026-10-21" } : t,
+    t.id === "t20" ? { ...t, owner: null } : t.id === "t8" ? { ...t, start: "2026-10-21", due: "2026-10-22" } : t,
   );
   const types = analyse({ ...project, tasks }).risks.map((r) => r.type);
   assert.ok(types.includes("unassigned"));

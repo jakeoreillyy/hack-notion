@@ -74,7 +74,7 @@ export function findNotifications(tasks: Task[], today: string): Notification[] 
     if (daysLeft > 2) continue;
     const when =
       daysLeft < 0
-        ? `was due ${-daysLeft === 1 ? "yesterday" : `${-daysLeft} days ago`}`
+        ? `is ${-daysLeft === 1 ? "1 day" : `${-daysLeft} days`} overdue`
         : daysLeft === 0
           ? "is due today"
           : `is due in ${daysLeft === 1 ? "1 day" : `${daysLeft} days`}`;

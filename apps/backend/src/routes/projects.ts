@@ -96,6 +96,7 @@ export function createProjectsRouter(store: Store, deps: Deps): Router {
       brief: body.brief,
       rubric: body.rubric,
       deadline: body.deadline,
+      startDate: today,
       members: body.members,
       criteria,
       tasks: scheduled.tasks,

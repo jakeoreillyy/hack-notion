@@ -154,7 +154,7 @@ test("notifications use ?today= and the 2-day rule", () =>
     const { body } = await call("GET", `${demo}/notifications?today=2026-10-20`);
     assert.deepEqual(body.warnings, []);
     assert.deepEqual(body.notifications.map((n: any) => n.taskId), ["t3", "t5", "t10", "t7", "t4"]);
-    assert.equal(body.notifications[0].message, "'Collect survey responses' was due 4 days ago.");
+    assert.equal(body.notifications[0].message, "'Collect survey responses' is 4 days overdue.");
     assert.equal(body.notifications[3].message, "'Gather market size statistics' is due in 1 day and hasn't been started.");
     assert.equal((await call("GET", `${demo}/notifications?today=tomorrow`)).status, 400);
   }));
@@ -221,4 +221,34 @@ test("malformed JSON returns 400 in the error shape", () =>
     } finally {
       server.close();
     }
+  }));
+
+test("handoff assumptions: grid edits, members in load, null owners, refresh", () =>
+  withApp(async (call) => {
+    const { body: plan } = await call("GET", demo);
+    const available = Object.fromEntries(plan.load.map((l: any) => [l.member, l.availableH]));
+
+    // Grid move: t8 to an earlier week (Monday..Friday), t11 into the same week as t8, t20 unassigned.
+    const tasks = plan.tasks.map((t: any) =>
+      t.id === "t8" ? { ...t, start: "2026-10-05", due: "2026-10-09" }
+      : t.id === "t20" ? { ...t, owner: null }
+      : t,
+    );
+    const { body } = await call("PUT", `${demo}/plan`, { tasks });
+    assert.deepEqual(Object.fromEntries(body.load.map((l: any) => [l.member, l.availableH])), available, "availableH unchanged");
+    assert.deepEqual(body.load.map((l: any) => l.member), ["Alex", "Jo", "Mia", "Ravi", "Sam"], "every member in load");
+    assert.equal(body.tasks.find((t: any) => t.id === "t20").owner, null);
+    assert.ok(body.risks.some((r: any) => r.type === "unassigned"));
+
+    const sameWeek = plan.tasks.map((t: any) =>
+      t.id === "t8" || t.id === "t9" ? { ...t, start: "2026-10-26", due: "2026-10-30" } : t,
+    );
+    const { body: grid } = await call("PUT", `${demo}/plan`, { tasks: sameWeek });
+    assert.ok(!grid.risks.some((r: any) => r.type === "dependency_conflict"), "t9 depends on t8 in the same week: fine");
+
+    const empty = await call("POST", "", { ...NEW_PROJECT, members: [...NEW_PROJECT.members, { name: "Zoe", hoursPerWeek: 2, skills: ["coding"], blocked: [] }] });
+    assert.ok(empty.body.load.some((l: any) => l.member === "Zoe" && l.plannedH === 0), "0-hour member still listed");
+
+    await call("POST", `${demo}/confirm`);
+    assert.equal((await call("GET", demo)).body.state, "confirmed", "refresh sees confirmed");
   }));
