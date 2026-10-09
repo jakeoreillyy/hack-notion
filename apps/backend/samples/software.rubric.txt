@@ -1,0 +1,1 @@
+Requirements gathering (15%). System design (15%). Working implementation (30%). Testing and code quality (15%). Agile process and teamwork (10%). Live demonstration (10%). Technical report (5%).

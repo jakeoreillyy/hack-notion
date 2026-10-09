@@ -119,7 +119,7 @@ The roles only stay independent if two things are nailed down **before** anyone 
 - **Framework:** Next.js (App Router) with TypeScript. One app, one `npm run dev`, one deploy. Pages and API routes live together.
 - **Styling:** Tailwind CSS, with shadcn/ui components for tables, dialogs and toasts.
 - **Validation and shared types:** `zod` schemas in `src/lib/schemas.ts`, used by both API routes and pages. A type error means a contract mismatch.
-- **LLM:** one provider SDK, key in `LLM_API_KEY`, wrapped in `src/lib/llm.ts`.
+- **LLM:** Anthropic SDK, key in `ANTHROPIC_API_KEY` (model in `ANTHROPIC_MODEL`), wrapped in `src/lib/llm.ts`.
 - **Notion:** `@notionhq/client`, token in `NOTION_TOKEN`, parent page in `NOTION_PARENT_PAGE_ID`.
 - **State:** in-memory `Map` saved to `data/projects.json`. No database.
 - **Dates:** `YYYY-MM-DD`, weekdays only count as working days.
