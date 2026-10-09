@@ -209,7 +209,12 @@ export function Dashboard({ plan, onPlanChange }: Props) {
                 {col.label}
                 <span className="font-normal tabular-nums text-slate-500">{tasks.length}</span>
               </h2>
-              <ul className="mt-2 space-y-2">
+              {/* Fixed height so long columns scroll instead of stretching the page. */}
+              <ul
+                tabIndex={0}
+                aria-label={`${col.label} tasks`}
+                className="board-scroll mt-2 h-[30rem] space-y-2 overflow-y-auto pr-1"
+              >
                 {tasks.map((t) => (
                   <TaskCard
                     key={t.id}

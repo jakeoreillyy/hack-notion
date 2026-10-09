@@ -94,6 +94,12 @@
   .section-title {
     @apply text-lg font-bold tracking-[-0.015em] text-slate-900;
   }
+  /* Thin ink scrollbar for the task board columns. */
+  .board-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-slate-400) transparent;
+    overscroll-behavior: contain;
+  }
   /* Highlighter stroke: used only to mark the current step and the viewer's own work. */
   .marker {
     background-image: linear-gradient(transparent 12%, var(--color-marker) 12%, var(--color-marker) 88%, transparent 88%);
