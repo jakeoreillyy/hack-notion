@@ -1,0 +1,425 @@
+[
+  {
+    "id": "t1",
+    "title": "Research competitor brands",
+    "criterionIds": [
+      "c1"
+    ],
+    "owner": null,
+    "estimateH": 4,
+    "confidence": "medium",
+    "start": null,
+    "due": null,
+    "dependsOn": [],
+    "status": "todo",
+    "requiredSkills": [
+      "research"
+    ],
+    "sourceLine": "Students must analyse at least three competitors."
+  },
+  {
+    "id": "t2",
+    "title": "Design customer survey",
+    "criterionIds": [
+      "c1"
+    ],
+    "owner": null,
+    "estimateH": 3,
+    "confidence": "high",
+    "start": null,
+    "due": null,
+    "dependsOn": [],
+    "status": "todo",
+    "requiredSkills": [
+      "research"
+    ],
+    "sourceLine": "Conduct a short customer survey (minimum 30 responses) and analyse the results."
+  },
+  {
+    "id": "t3",
+    "title": "Collect survey responses",
+    "criterionIds": [
+      "c1"
+    ],
+    "owner": null,
+    "estimateH": 4,
+    "confidence": "medium",
+    "start": null,
+    "due": null,
+    "dependsOn": [
+      "t2"
+    ],
+    "status": "todo",
+    "requiredSkills": [
+      "research"
+    ],
+    "sourceLine": "Conduct a short customer survey (minimum 30 responses) and analyse the results."
+  },
+  {
+    "id": "t4",
+    "title": "Analyse survey responses",
+    "criterionIds": [
+      "c1"
+    ],
+    "owner": null,
+    "estimateH": 5,
+    "confidence": "low",
+    "start": null,
+    "due": null,
+    "dependsOn": [
+      "t3"
+    ],
+    "status": "todo",
+    "requiredSkills": [
+      "data"
+    ],
+    "sourceLine": "Conduct a short customer survey (minimum 30 responses) and analyse the results."
+  },
+  {
+    "id": "t5",
+    "title": "Compare competitor positioning",
+    "criterionIds": [
+      "c1"
+    ],
+    "owner": null,
+    "estimateH": 4,
+    "confidence": "medium",
+    "start": null,
+    "due": null,
+    "dependsOn": [
+      "t1"
+    ],
+    "status": "todo",
+    "requiredSkills": [
+      "data"
+    ],
+    "sourceLine": "Students must analyse at least three competitors."
+  },
+  {
+    "id": "t6",
+    "title": "Segment the target market",
+    "criterionIds": [
+      "c1"
+    ],
+    "owner": null,
+    "estimateH": 4,
+    "confidence": "medium",
+    "start": null,
+    "due": null,
+    "dependsOn": [
+      "t4"
+    ],
+    "status": "todo",
+    "requiredSkills": [
+      "data",
+      "research"
+    ],
+    "sourceLine": "Identify and describe the target market segments, using market size data where available."
+  },
+  {
+    "id": "t7",
+    "title": "Gather market size statistics",
+    "criterionIds": [
+      "c1"
+    ],
+    "owner": null,
+    "estimateH": 3,
+    "confidence": "medium",
+    "start": null,
+    "due": null,
+    "dependsOn": [],
+    "status": "todo",
+    "requiredSkills": [
+      "research"
+    ],
+    "sourceLine": "Identify and describe the target market segments, using market size data where available."
+  },
+  {
+    "id": "t8",
+    "title": "Draft marketing mix recommendations",
+    "criterionIds": [
+      "c2"
+    ],
+    "owner": null,
+    "estimateH": 6,
+    "confidence": "low",
+    "start": null,
+    "due": null,
+    "dependsOn": [
+      "t5",
+      "t6"
+    ],
+    "status": "todo",
+    "requiredSkills": [
+      "writing"
+    ],
+    "sourceLine": "Recommend a marketing mix (4Ps) with justification."
+  },
+  {
+    "id": "t9",
+    "title": "Justify pricing and channel choices",
+    "criterionIds": [
+      "c2"
+    ],
+    "owner": null,
+    "estimateH": 3,
+    "confidence": "medium",
+    "start": null,
+    "due": null,
+    "dependsOn": [
+      "t8"
+    ],
+    "status": "todo",
+    "requiredSkills": [
+      "writing",
+      "research"
+    ],
+    "sourceLine": "Recommend a marketing mix (4Ps) with justification."
+  },
+  {
+    "id": "t10",
+    "title": "Write introduction",
+    "criterionIds": [
+      "c3"
+    ],
+    "owner": null,
+    "estimateH": 2,
+    "confidence": "high",
+    "start": null,
+    "due": null,
+    "dependsOn": [],
+    "status": "todo",
+    "requiredSkills": [
+      "writing"
+    ],
+    "sourceLine": "The report must include an executive summary, introduction, analysis, recommendations and conclusion."
+  },
+  {
+    "id": "t11",
+    "title": "Write market analysis section",
+    "criterionIds": [
+      "c1",
+      "c3"
+    ],
+    "owner": null,
+    "estimateH": 5,
+    "confidence": "medium",
+    "start": null,
+    "due": null,
+    "dependsOn": [
+      "t4",
+      "t5",
+      "t6"
+    ],
+    "status": "todo",
+    "requiredSkills": [
+      "writing"
+    ],
+    "sourceLine": "The report must include an executive summary, introduction, analysis, recommendations and conclusion."
+  },
+  {
+    "id": "t12",
+    "title": "Write conclusion",
+    "criterionIds": [
+      "c3"
+    ],
+    "owner": null,
+    "estimateH": 2,
+    "confidence": "high",
+    "start": null,
+    "due": null,
+    "dependsOn": [
+      "t8",
+      "t11"
+    ],
+    "status": "todo",
+    "requiredSkills": [
+      "writing"
+    ],
+    "sourceLine": "The report must include an executive summary, introduction, analysis, recommendations and conclusion."
+  },
+  {
+    "id": "t13",
+    "title": "Write executive summary",
+    "criterionIds": [
+      "c3"
+    ],
+    "owner": null,
+    "estimateH": 2,
+    "confidence": "high",
+    "start": null,
+    "due": null,
+    "dependsOn": [
+      "t8",
+      "t11"
+    ],
+    "status": "todo",
+    "requiredSkills": [
+      "writing"
+    ],
+    "sourceLine": "The report must include an executive summary, introduction, analysis, recommendations and conclusion."
+  },
+  {
+    "id": "t14",
+    "title": "Edit full report draft",
+    "criterionIds": [
+      "c3"
+    ],
+    "owner": null,
+    "estimateH": 6,
+    "confidence": "medium",
+    "start": null,
+    "due": null,
+    "dependsOn": [
+      "t9",
+      "t12",
+      "t13"
+    ],
+    "status": "todo",
+    "requiredSkills": [
+      "editing"
+    ],
+    "sourceLine": "Submit a 2,500-word group report and deliver a 10-minute presentation by 6 November 2026."
+  },
+  {
+    "id": "t15",
+    "title": "Format references in Harvard style",
+    "criterionIds": [
+      "c3"
+    ],
+    "owner": null,
+    "estimateH": 3,
+    "confidence": "high",
+    "start": null,
+    "due": null,
+    "dependsOn": [
+      "t1"
+    ],
+    "status": "todo",
+    "requiredSkills": [
+      "editing"
+    ],
+    "sourceLine": "Support all claims with academic and industry sources, referenced in Harvard style."
+  },
+  {
+    "id": "t16",
+    "title": "Proofread final report",
+    "criterionIds": [
+      "c3"
+    ],
+    "owner": null,
+    "estimateH": 4,
+    "confidence": "high",
+    "start": null,
+    "due": null,
+    "dependsOn": [
+      "t14",
+      "t15"
+    ],
+    "status": "todo",
+    "requiredSkills": [
+      "editing"
+    ],
+    "sourceLine": "Submit a 2,500-word group report and deliver a 10-minute presentation by 6 November 2026."
+  },
+  {
+    "id": "t17",
+    "title": "Design slide deck",
+    "criterionIds": [
+      "c5"
+    ],
+    "owner": null,
+    "estimateH": 5,
+    "confidence": "medium",
+    "start": null,
+    "due": null,
+    "dependsOn": [
+      "t8",
+      "t11"
+    ],
+    "status": "todo",
+    "requiredSkills": [
+      "design"
+    ],
+    "sourceLine": "Submit a 2,500-word group report and deliver a 10-minute presentation by 6 November 2026."
+  },
+  {
+    "id": "t18",
+    "title": "Write speaker notes",
+    "criterionIds": [
+      "c5"
+    ],
+    "owner": null,
+    "estimateH": 3,
+    "confidence": "medium",
+    "start": null,
+    "due": null,
+    "dependsOn": [
+      "t17"
+    ],
+    "status": "todo",
+    "requiredSkills": [
+      "writing",
+      "presenting"
+    ],
+    "sourceLine": "Submit a 2,500-word group report and deliver a 10-minute presentation by 6 November 2026."
+  },
+  {
+    "id": "t19",
+    "title": "Rehearse presentation",
+    "criterionIds": [
+      "c5"
+    ],
+    "owner": null,
+    "estimateH": 3,
+    "confidence": "high",
+    "start": null,
+    "due": null,
+    "dependsOn": [
+      "t18"
+    ],
+    "status": "todo",
+    "requiredSkills": [
+      "presenting"
+    ],
+    "sourceLine": "Submit a 2,500-word group report and deliver a 10-minute presentation by 6 November 2026."
+  },
+  {
+    "id": "t20",
+    "title": "Collect individual reflections",
+    "criterionIds": [
+      "c6"
+    ],
+    "owner": null,
+    "estimateH": 1,
+    "confidence": "high",
+    "start": null,
+    "due": null,
+    "dependsOn": [],
+    "status": "todo",
+    "requiredSkills": [
+      "writing"
+    ],
+    "sourceLine": "Each member must submit a 300-word individual reflection on teamwork."
+  },
+  {
+    "id": "t21",
+    "title": "Check figures and charts in report",
+    "criterionIds": [
+      "c1"
+    ],
+    "owner": null,
+    "estimateH": 2,
+    "confidence": "medium",
+    "start": null,
+    "due": null,
+    "dependsOn": [
+      "t11"
+    ],
+    "status": "todo",
+    "requiredSkills": [
+      "data"
+    ],
+    "sourceLine": "Conduct a short customer survey (minimum 30 responses) and analyse the results."
+  }
+]
