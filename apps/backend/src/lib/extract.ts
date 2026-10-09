@@ -11,7 +11,7 @@ Return JSON: {"criteria":[{"name":string,"weight":number|null}],"deliverables":[
 - Do not invent criteria or deliverables that the text does not support.`;
 
 // For matching source lines and criterion names: ignore case, spacing, PDF ligatures and curly quotes/dashes.
-const norm = (s: string) =>
+export const norm = (s: string) =>
   s
     .normalize("NFKC")
     .toLowerCase()
