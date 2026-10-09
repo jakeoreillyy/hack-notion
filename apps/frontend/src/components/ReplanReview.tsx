@@ -50,25 +50,25 @@ export function ReplanReview({ plan, change, proposal, busy, error, onConfirm, o
         role="dialog"
         aria-modal="true"
         aria-labelledby="replan-title"
-        className="w-full max-w-2xl overflow-hidden rounded-2xl bg-white shadow-2xl shadow-slate-900/20"
+        className="w-full max-w-2xl overflow-hidden rounded-[6px] border border-slate-900 bg-white shadow-[6px_6px_0_rgb(21_32_56/0.25)]"
       >
-        <div className="flex items-center gap-4 border-b border-slate-200 bg-gradient-to-br from-indigo-50 to-white px-6 py-5">
+        <div className="flex items-center gap-4 border-b border-rule px-6 py-5">
           <Avatar name={change.member} colorIndex={colorIndex(change.member)} size="lg" />
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-indigo-600">Suggested new plan</p>
-            <h2 id="replan-title" className="mt-0.5 text-lg font-bold tracking-tight">
+            <p className="text-sm text-slate-500">Suggested new plan</p>
+            <h2 id="replan-title" className="mt-0.5 text-xl font-extrabold tracking-[-0.02em]">
               {change.member} can&apos;t work {formatDay(change.from)} – {formatDay(change.to)}
             </h2>
           </div>
         </div>
 
         <div className="space-y-6 px-6 py-5">
-          <p className="border-l-4 border-indigo-300 bg-slate-50 px-4 py-3 text-sm leading-relaxed text-slate-700">
+          <p className="border-l-2 border-margin/60 pl-4 text-sm leading-relaxed text-slate-700">
             {proposal.explanation}
           </p>
 
           {proposal.warnings.length > 0 && (
-            <ul className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+            <ul className="rounded-[3px] border-l-4 border-amber-500 bg-amber-50 px-4 py-3 text-sm text-amber-800">
               {proposal.warnings.map((w) => (
                 <li key={w}>{w}</li>
               ))}
@@ -82,19 +82,19 @@ export function ReplanReview({ plan, change, proposal, busy, error, onConfirm, o
               </h3>
               <ul className="mt-3 space-y-2">
                 {[...byTask].map(([taskId, changes]) => (
-                  <li key={taskId} className="rounded-xl border border-slate-200 px-4 py-3 text-sm">
+                  <li key={taskId} className="rounded-[3px] border border-slate-200 px-4 py-3 text-sm">
                     <p className="font-semibold text-slate-800">{taskTitle(taskId)}</p>
                     {changes.map((c) => (
                       <div key={c.field} className="mt-2 flex flex-wrap items-center gap-2 text-slate-600">
                         <span className="w-10 text-xs text-slate-400">{FIELD_LABEL[c.field]}</span>
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-red-50 py-0.5 pl-1 pr-2.5 text-red-800 line-through decoration-red-300">
+                        <span className="inline-flex items-center gap-1.5 rounded-[3px] bg-red-50 py-0.5 pl-1 pr-2 text-red-800 line-through decoration-margin">
                           {c.field === "owner" && c.from && <Avatar name={c.from} colorIndex={colorIndex(c.from)} size="sm" />}
                           {showValue(c.field, c.from)}
                         </span>
                         <span aria-hidden className="text-slate-400">
                           →
                         </span>
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 py-0.5 pl-1 pr-2.5 font-semibold text-emerald-800">
+                        <span className="inline-flex items-center gap-1.5 rounded-[3px] bg-emerald-50 py-0.5 pl-1 pr-2 font-semibold text-emerald-800">
                           {c.field === "owner" && c.to && <Avatar name={c.to} colorIndex={colorIndex(c.to)} size="sm" />}
                           {showValue(c.field, c.to)}
                         </span>
@@ -116,13 +116,13 @@ export function ReplanReview({ plan, change, proposal, busy, error, onConfirm, o
           </section>
 
           {error && (
-            <p role="alert" className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">
+            <p role="alert" className="rounded-[3px] border-l-4 border-margin bg-red-50 px-3 py-2 text-sm text-red-800">
               {error}
             </p>
           )}
         </div>
 
-        <div className="flex flex-wrap items-center justify-end gap-3 border-t border-slate-200 bg-slate-50 px-6 py-4">
+        <div className="flex flex-wrap items-center justify-end gap-3 border-t border-rule bg-slate-50 px-6 py-4">
           {!nothingChanges && (
             <p className="mr-auto text-xs text-slate-500">Confirming updates the plan and your Notion board.</p>
           )}
@@ -131,7 +131,7 @@ export function ReplanReview({ plan, change, proposal, busy, error, onConfirm, o
           </button>
           {!nothingChanges && (
             <button type="button" onClick={onConfirm} disabled={busy} autoFocus className="btn-primary">
-              {busy ? "Updating…" : "Confirm changes ✓"}
+              {busy ? "Updating…" : "Confirm changes"}
             </button>
           )}
         </div>
@@ -152,7 +152,7 @@ function LoadRow({ before, after, colorIndex }: { before: Load | undefined; afte
       <div className="min-w-0 flex-1">
         <div className="flex justify-between gap-2 text-sm">
           <span className="font-medium text-slate-800">{after.member}</span>
-          <span className="tabular-nums text-slate-500">
+          <span className="text-slate-500">
             {before && changed && (
               <>
                 <span className={over(before) ? "text-red-600" : ""}>{label(before)}</span> →{" "}
@@ -163,12 +163,12 @@ function LoadRow({ before, after, colorIndex }: { before: Load | undefined; afte
             </span>
           </span>
         </div>
-        <div className="relative mt-1.5 h-2 overflow-hidden rounded-full bg-slate-100">
+        <div className="relative mt-1.5 h-2 overflow-hidden rounded-[1px] bg-slate-100">
           {before && changed && (
-            <div className="absolute h-full rounded-full bg-slate-300" style={{ width: `${pct(before)}%` }} />
+            <div className="absolute h-full bg-slate-300" style={{ width: `${pct(before)}%` }} />
           )}
           <div
-            className={`absolute h-full rounded-full transition-all ${over(after) ? "bg-red-500" : "bg-indigo-500"}`}
+            className={`absolute h-full transition-all ${over(after) ? "bg-margin" : "bg-indigo-600"}`}
             style={{ width: `${pct(after)}%` }}
           />
         </div>

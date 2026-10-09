@@ -29,10 +29,10 @@ export default function ProjectPage() {
     return (
       <Shell step={2}>
         {error ? (
-          <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">{error}</p>
+          <p className="rounded-[4px] border-l-4 border-margin bg-white px-4 py-3 text-sm text-red-800">{error}</p>
         ) : (
           <p className="flex items-center gap-2 text-slate-500">
-            <span className="h-4 w-4 animate-spin rounded-full border-2 border-slate-300 border-t-indigo-600" />
+            <span className="h-4 w-4 animate-spin rounded-full border-2 border-slate-300 border-t-indigo-600" aria-hidden />
             Loading plan…
           </p>
         )}
@@ -86,10 +86,10 @@ export default function ProjectPage() {
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <div className="flex items-center gap-2.5">
-            <h1 className="text-3xl font-bold tracking-tight">Your draft plan</h1>
-            <span className="rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-800">Draft</span>
+            <h1 className="text-4xl sm:text-5xl">Your draft plan</h1>
+            <span className="-rotate-3 rounded-[3px] border-2 border-amber-600 px-2 py-0.5 text-sm font-extrabold text-amber-700">Draft</span>
           </div>
-          <p className="mt-1.5 text-slate-600">
+          <p className="mt-2 text-slate-600">
             A starting point, not a decision. Move things around, then confirm as a team.
           </p>
         </div>
@@ -99,13 +99,13 @@ export default function ProjectPage() {
       </header>
 
       {error && (
-        <p role="alert" className="mt-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+        <p role="alert" className="mt-6 rounded-[4px] border-l-4 border-margin bg-white px-4 py-3 text-sm text-red-800">
           {error}
         </p>
       )}
       <Warnings warnings={plan.warnings} />
 
-      <dl className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-4">
+      <dl className="card mt-8 grid grid-cols-2 gap-px overflow-hidden bg-rule md:grid-cols-4">
         <Stat label="Tasks" value={plan.tasks.length} />
         <Stat label="Weeks" value={weekCount} />
         <Stat label="Total hours" value={+totalHours.toFixed(1)} />
@@ -117,8 +117,8 @@ export default function ProjectPage() {
       </dl>
 
       {plan.coverageGaps.length > 0 && (
-        <div className="mt-4 flex gap-3 rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-900">
-          <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
+        <div className="mt-4 flex gap-3 rounded-[4px] border-l-4 border-margin bg-white px-5 py-4 text-sm text-red-900 shadow-[0_1px_0_var(--color-rule)]">
+          <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-[3px] bg-margin text-xs font-bold text-white">
             !
           </span>
           <div>
@@ -154,8 +154,8 @@ export default function ProjectPage() {
                     </span>
                   </div>
                   <div className="mt-1.5 flex items-center gap-2">
-                    <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-slate-100">
-                      <div className={`h-full rounded-full ${criterionColor(i).dot}`} style={{ width: `${c.weight}%` }} />
+                    <div className="h-2 flex-1 overflow-hidden rounded-[1px] bg-slate-100">
+                      <div className={`h-full ${criterionColor(i).dot}`} style={{ width: `${c.weight}%` }} />
                     </div>
                     <span className="w-9 text-right text-xs tabular-nums text-slate-500">{c.weight}%</span>
                   </div>
@@ -201,7 +201,7 @@ export default function ProjectPage() {
       </section>
 
       <div className="sticky bottom-4 z-20 mt-8">
-        <div className="card flex flex-wrap items-center justify-between gap-4 px-6 py-4 shadow-lg shadow-slate-900/5">
+        <div className="card flex flex-wrap items-center justify-between gap-4 border-slate-900 px-6 py-4 shadow-[0_10px_30px_-12px_rgb(21_32_56/0.35)]">
           <p className="text-sm text-slate-600">
             Happy with it? Confirming opens your dashboard and builds the Notion workspace.
           </p>
@@ -211,7 +211,7 @@ export default function ProjectPage() {
                 <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" /> Confirming…
               </>
             ) : (
-              "Confirm plan ✓"
+              "Confirm plan"
             )}
           </button>
         </div>
@@ -231,11 +231,11 @@ function Shell({ step, children }: { step: 1 | 2 | 3; children: React.ReactNode 
 
 function Stat({ label, value, tone }: { label: string; value: string | number; tone?: "ok" | "warn" }) {
   return (
-    <div className="card px-5 py-4">
-      <dt className="text-xs font-medium text-slate-500">{label}</dt>
+    <div className="bg-white px-5 py-4">
+      <dt className="text-sm text-slate-500">{label}</dt>
       <dd
-        className={`mt-1 text-2xl font-bold tabular-nums tracking-tight ${
-          tone === "warn" ? "text-red-600" : tone === "ok" ? "text-emerald-600" : "text-slate-900"
+        className={`mt-0.5 text-3xl font-extrabold tabular-nums tracking-[-0.03em] ${
+          tone === "warn" ? "text-margin" : tone === "ok" ? "text-emerald-700" : "text-slate-900"
         }`}
       >
         {value}
@@ -247,7 +247,7 @@ function Stat({ label, value, tone }: { label: string; value: string | number; t
 function Warnings({ warnings }: { warnings: string[] }) {
   if (warnings.length === 0) return null;
   return (
-    <ul className="mb-6 space-y-1 rounded-xl border border-amber-200 bg-amber-50 px-5 py-3 text-sm text-amber-900">
+    <ul className="mb-6 space-y-1 rounded-[4px] border-l-4 border-amber-500 bg-amber-50 px-5 py-3 text-sm text-amber-900">
       {warnings.map((w) => (
         <li key={w}>{w}</li>
       ))}

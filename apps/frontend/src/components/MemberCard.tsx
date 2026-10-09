@@ -35,7 +35,7 @@ export function MemberCard({ member, index, colorIndex, deadline, canRemove, onC
   };
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-slate-50/60 p-4 transition hover:border-slate-300">
+    <div className="rounded-[4px] border border-slate-200 bg-slate-50/70 p-4">
       <div className="flex items-end gap-3">
         <Avatar name={member.name || `${index + 1}`} colorIndex={member.name ? colorIndex : -1} size="lg" />
         <div className="min-w-0 flex-1">
@@ -71,7 +71,7 @@ export function MemberCard({ member, index, colorIndex, deadline, canRemove, onC
           <button
             type="button"
             onClick={onRemove}
-            className="mb-0.5 rounded-lg px-2.5 py-2 text-sm text-slate-400 transition hover:bg-red-50 hover:text-red-600"
+            className="mb-0.5 rounded-[4px] px-2.5 py-2 text-sm text-slate-400 underline-offset-2 transition hover:text-margin hover:underline"
             aria-label={`Remove ${member.name || `member ${index + 1}`}`}
           >
             Remove
@@ -90,10 +90,10 @@ export function MemberCard({ member, index, colorIndex, deadline, canRemove, onC
                 type="button"
                 aria-pressed={on}
                 onClick={() => toggleSkill(skill)}
-                className={`rounded-full border px-3 py-1 text-xs font-medium capitalize transition ${
+                className={`rounded-[3px] border px-2.5 py-1 text-xs font-medium capitalize transition ${
                   on
-                    ? "border-indigo-600 bg-indigo-600 text-white shadow-sm shadow-indigo-600/20"
-                    : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:text-slate-900"
+                    ? "border-indigo-600 bg-indigo-600 text-white"
+                    : "border-slate-300 bg-white text-slate-600 hover:border-slate-500 hover:text-slate-900"
                 }`}
               >
                 {on && "✓ "}
@@ -123,13 +123,13 @@ export function MemberCard({ member, index, colorIndex, deadline, canRemove, onC
           {member.blocked.map((day) => (
             <span
               key={day}
-              className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white py-1 pl-3 pr-1 text-xs font-medium text-slate-700"
+              className="inline-flex items-center gap-1 rounded-[3px] border border-slate-300 bg-white py-1 pl-2.5 pr-1 text-xs font-medium text-slate-700"
             >
               {formatDay(day)}
               <button
                 type="button"
                 onClick={() => onChange({ ...member, blocked: member.blocked.filter((d) => d !== day) })}
-                className="rounded-full px-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+                className="rounded-[2px] px-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
                 aria-label={`Remove ${formatDay(day)}`}
               >
                 ×

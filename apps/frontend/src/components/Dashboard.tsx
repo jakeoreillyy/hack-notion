@@ -76,12 +76,12 @@ export function Dashboard({ plan, onPlanChange }: Props) {
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <div className="flex items-center gap-2.5">
-            <h1 className="text-3xl font-bold tracking-tight">Project dashboard</h1>
-            <span className="rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-800">
+            <h1 className="text-4xl sm:text-5xl">Project dashboard</h1>
+            <span className="-rotate-3 rounded-[3px] border-2 border-emerald-700 px-2 py-0.5 text-sm font-extrabold text-emerald-700">
               Confirmed
             </span>
           </div>
-          <p className="mt-1.5 text-slate-600">Update task status here. Notion follows automatically.</p>
+          <p className="mt-2 text-slate-600">Update task status here. Notion follows automatically.</p>
         </div>
         <div className="flex flex-wrap items-end gap-3">
           <label className="label">
@@ -95,7 +95,7 @@ export function Dashboard({ plan, onPlanChange }: Props) {
           </label>
           {plan.notionUrl && (
             <a href={plan.notionUrl} target="_blank" rel="noreferrer" className="btn-secondary py-2">
-              <span className="flex h-5 w-5 items-center justify-center rounded bg-slate-900 text-[11px] font-bold text-white">
+              <span className="flex h-5 w-5 items-center justify-center rounded-[3px] bg-slate-900 text-[11px] font-bold text-white">
                 N
               </span>
               Open in Notion ↗
@@ -105,17 +105,17 @@ export function Dashboard({ plan, onPlanChange }: Props) {
       </header>
 
       {error && (
-        <p role="alert" className="mt-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+        <p role="alert" className="mt-6 rounded-[4px] border-l-4 border-margin bg-white px-4 py-3 text-sm text-red-800">
           {error}
         </p>
       )}
       {notice && (
         <div
           role="status"
-          className="mt-6 flex items-center justify-between gap-3 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-900"
+          className="mt-6 flex items-center justify-between gap-3 rounded-[4px] border-l-4 border-emerald-600 bg-white px-4 py-3 text-sm font-medium text-emerald-900 shadow-[0_1px_0_var(--color-rule)]"
         >
           <span className="flex items-center gap-2">
-            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500 text-xs text-white">✓</span>
+            <span className="flex h-5 w-5 items-center justify-center rounded-[3px] bg-emerald-600 text-xs text-white">✓</span>
             {notice}
           </span>
           <button type="button" onClick={() => setNotice(null)} className="text-emerald-600 hover:text-emerald-900" aria-label="Dismiss">
@@ -128,13 +128,13 @@ export function Dashboard({ plan, onPlanChange }: Props) {
         <section className="card p-6 lg:col-span-2">
           <h2 className="section-title">Team progress</h2>
           <p className="mt-3 flex items-baseline gap-2">
-            <span className="text-4xl font-bold tabular-nums tracking-tight">{pctDone}%</span>
+            <span className="text-6xl font-extrabold tabular-nums tracking-[-0.04em]">{pctDone}%</span>
             <span className="text-sm text-slate-500">
               {done} of {plan.tasks.length} tasks done
             </span>
           </p>
-          <div className="mt-4 flex h-2.5 overflow-hidden rounded-full bg-slate-100">
-            <div className="bg-emerald-500 transition-all duration-500" style={{ width: `${(done / total) * 100}%` }} />
+          <div className="mt-4 flex h-3 overflow-hidden rounded-[1px] bg-slate-100">
+            <div className="bg-emerald-600 transition-all duration-500" style={{ width: `${(done / total) * 100}%` }} />
             <div className="bg-amber-400 transition-all duration-500" style={{ width: `${(count("doing") / total) * 100}%` }} />
           </div>
           <ul className="mt-3 flex gap-4 text-xs text-slate-600">
@@ -152,7 +152,7 @@ export function Dashboard({ plan, onPlanChange }: Props) {
             <h2 className="section-title flex items-center gap-2">
               Reminders
               <span
-                className={`rounded-full px-2 py-0.5 text-xs font-semibold ${
+                className={`rounded-[3px] px-1.5 py-0.5 text-xs font-bold tabular-nums ${
                   notifications.length ? "bg-amber-100 text-amber-800" : "bg-slate-100 text-slate-500"
                 }`}
               >
@@ -176,17 +176,17 @@ export function Dashboard({ plan, onPlanChange }: Props) {
             </div>
           </div>
           {notifications.length === 0 ? (
-            <p className="mt-4 rounded-lg bg-slate-50 px-4 py-6 text-center text-sm text-slate-500">
-              Nothing due in the next 2 days. 🎉
+            <p className="mt-4 rounded-[4px] border border-dashed border-slate-300 px-4 py-6 text-center text-sm text-slate-500">
+              Nothing due in the next 2 days.
             </p>
           ) : (
             <ul className="mt-4 space-y-2">
               {notifications.map((n) => (
                 <li
                   key={n.taskId}
-                  className={`flex items-center gap-3 rounded-lg border px-3 py-2.5 text-sm ${
-                    n.daysLeft < 0 ? "border-red-200 bg-red-50 text-red-900" : "border-amber-200 bg-amber-50 text-amber-900"
-                  } ${me && n.owner === me ? "ring-2 ring-indigo-400" : ""}`}
+                  className={`flex items-center gap-3 rounded-[3px] border-l-4 px-3 py-2.5 text-sm ${
+                    n.daysLeft < 0 ? "border-margin text-red-900" : "border-amber-500 text-amber-950"
+                  } ${me && n.owner === me ? "bg-marker-soft" : n.daysLeft < 0 ? "bg-red-50" : "bg-amber-50"}`}
                 >
                   <Avatar name={n.owner} colorIndex={colorIndex(n.owner)} size="sm" />
                   <span>
@@ -203,11 +203,11 @@ export function Dashboard({ plan, onPlanChange }: Props) {
         {COLUMNS.map((col) => {
           const tasks = sortByDue(plan.tasks.filter((t) => t.status === col.status));
           return (
-            <div key={col.status} className="rounded-2xl bg-slate-200/50 p-3">
-              <h2 className="flex items-center gap-2 px-1.5 py-1 text-sm font-semibold text-slate-700">
+            <div key={col.status} className="rounded-[4px] border-t-2 border-slate-900 bg-slate-200/40 p-3">
+              <h2 className="flex items-center gap-2 px-1 py-1 font-bold text-slate-900">
                 <span className={`h-2 w-2 rounded-full ${col.dot}`} />
                 {col.label}
-                <span className="font-normal text-slate-400">{tasks.length}</span>
+                <span className="font-normal tabular-nums text-slate-500">{tasks.length}</span>
               </h2>
               <ul className="mt-2 space-y-2">
                 {tasks.map((t) => (
@@ -222,7 +222,7 @@ export function Dashboard({ plan, onPlanChange }: Props) {
                   />
                 ))}
                 {tasks.length === 0 && (
-                  <li className="rounded-xl border-2 border-dashed border-slate-300/70 px-3 py-6 text-center text-xs text-slate-400">
+                  <li className="rounded-[3px] border border-dashed border-slate-300 px-3 py-6 text-center text-xs text-slate-400">
                     Nothing here
                   </li>
                 )}
@@ -284,8 +284,8 @@ function TaskCard({
 
   return (
     <li
-      className={`rounded-xl border bg-white p-3.5 text-sm shadow-xs transition hover:shadow-sm ${
-        mine ? "border-indigo-400 ring-2 ring-indigo-200" : "border-slate-200"
+      className={`rounded-[3px] border p-3.5 text-sm shadow-[0_1px_0_var(--color-rule)] ${
+        mine ? "border-slate-900 bg-marker-soft" : "border-slate-200 bg-white"
       }`}
     >
       <div className="flex items-start justify-between gap-2">
@@ -293,7 +293,7 @@ function TaskCard({
           {task.title}
         </p>
         {updated && (
-          <span className="shrink-0 rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-semibold text-emerald-800">
+          <span className="shrink-0 rounded-[3px] bg-emerald-100 px-1.5 py-0.5 text-[11px] font-semibold text-emerald-800">
             Updated
           </span>
         )}
@@ -305,8 +305,8 @@ function TaskCard({
         <span>{task.estimateH} h</span>
         {task.due && (
           <span
-            className={`ml-auto rounded-md px-1.5 py-0.5 ${
-              overdue ? "bg-red-50 font-semibold text-red-700" : "bg-slate-100 text-slate-600"
+            className={`ml-auto rounded-[3px] px-1.5 py-0.5 ${
+              overdue ? "bg-red-50 font-semibold text-margin" : "bg-slate-100 text-slate-600"
             }`}
           >
             {overdue ? "Overdue · " : ""}
@@ -314,7 +314,7 @@ function TaskCard({
           </span>
         )}
       </div>
-      <div className="mt-3 grid grid-cols-3 gap-0.5 rounded-lg bg-slate-100 p-0.5" role="group" aria-label={`Status of ${task.title}`}>
+      <div className="mt-3 grid grid-cols-3 gap-0.5 rounded-[3px] border border-slate-200 bg-slate-100 p-0.5" role="group" aria-label={`Status of ${task.title}`}>
         {COLUMNS.map((c) => {
           const active = task.status === c.status;
           return (
@@ -323,8 +323,8 @@ function TaskCard({
               type="button"
               aria-pressed={active}
               onClick={() => !active && onStatus(task, c.status)}
-              className={`rounded-md py-1 text-xs font-medium transition ${
-                active ? "bg-white text-slate-900 shadow-xs" : "text-slate-500 hover:text-slate-800"
+              className={`rounded-[2px] py-1 text-xs font-medium transition ${
+                active ? "bg-slate-900 text-white" : "text-slate-500 hover:bg-white hover:text-slate-800"
               }`}
             >
               {c.label}
@@ -397,7 +397,7 @@ function UnavailableForm({
             />
           </label>
         </div>
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        {error && <p className="text-sm text-margin">{error}</p>}
         <button type="submit" disabled={busy} className="btn-primary w-full">
           {busy ? (
             <>

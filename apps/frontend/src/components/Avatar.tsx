@@ -22,7 +22,7 @@ export function Avatar({ name, colorIndex, size = "md" }: Props) {
   return (
     <span
       aria-hidden
-      className={`inline-flex shrink-0 items-center justify-center rounded-full font-semibold ring-2 ring-white ${SIZES[size]} ${personColor(colorIndex)}`}
+      className={`inline-flex shrink-0 items-center justify-center rounded-full font-bold ring-2 ring-white ${SIZES[size]} ${personColor(colorIndex)}`}
     >
       {initials}
     </span>

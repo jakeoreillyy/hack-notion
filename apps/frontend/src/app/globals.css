@@ -1,32 +1,102 @@
 @import "tailwindcss";
 
+/* Look: an exercise book. Graph-paper page, biro-blue ink, a red margin rule, highlighter for "this is you". */
 @theme inline {
-  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-schibsted), ui-sans-serif, system-ui, sans-serif;
+}
+
+@theme {
+  /* Biro blue replaces indigo everywhere. */
+  --color-indigo-50: #eef1fb;
+  --color-indigo-100: #dde3f7;
+  --color-indigo-200: #bcc7ef;
+  --color-indigo-300: #8e9fe2;
+  --color-indigo-400: #5e75d0;
+  --color-indigo-500: #3a55c2;
+  --color-indigo-600: #2541b2;
+  --color-indigo-700: #1d3392;
+  --color-indigo-800: #182a73;
+  --color-indigo-900: #142258;
+
+  /* Ink greys, tinted toward the blue of the paper rules. */
+  --color-slate-50: #f5f7fa;
+  --color-slate-100: #eaeef4;
+  --color-slate-200: #d8dfe8;
+  --color-slate-300: #bac5d3;
+  --color-slate-400: #8492a6;
+  --color-slate-500: #5b697e;
+  --color-slate-600: #45536a;
+  --color-slate-700: #323f56;
+  --color-slate-800: #222e44;
+  --color-slate-900: #152038;
+
+  --color-paper: #f3f6f9;
+  --color-rule: #d3dceb;
+  --color-margin: #d7263d;
+  --color-marker: #ffe45c;
+  --color-marker-soft: #fff6bf;
 }
 
 @layer base {
   body {
-    @apply bg-[#f6f6f3] font-sans text-slate-900 antialiased;
+    @apply font-sans text-slate-900 antialiased;
+    background-color: var(--color-paper);
+    background-image:
+      linear-gradient(to right, rgb(37 65 178 / 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(37 65 178 / 0.06) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  h1 {
+    @apply font-extrabold tracking-[-0.03em];
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-indigo-600);
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+    }
   }
 }
 
 @layer components {
   .input {
-    @apply block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-xs transition placeholder:text-slate-400 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 focus:outline-none;
+    @apply block w-full rounded-[4px] border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 transition placeholder:text-slate-400 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/15 focus:outline-none;
   }
+  /* A sheet of paper lying on the grid. */
   .card {
-    @apply rounded-2xl border border-slate-200/80 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04),0_4px_16px_-8px_rgba(15,23,42,0.08)];
+    @apply rounded-[6px] border border-rule bg-white shadow-[0_1px_0_var(--color-rule),0_3px_0_-1px_rgb(21_32_56/0.04)];
+  }
+  /* A sheet with an exercise-book margin; children with .in-margin sit left of the red rule. */
+  .sheet {
+    @apply relative pl-16 sm:pl-20;
+  }
+  .sheet::before {
+    content: "";
+    @apply pointer-events-none absolute inset-y-0 left-11 w-px bg-margin/60 sm:left-14;
+  }
+  .in-margin {
+    @apply absolute left-0 w-11 text-center sm:w-14;
   }
   .label {
     @apply text-xs font-medium text-slate-500;
   }
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-indigo-600/20 transition hover:bg-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-flex items-center justify-center gap-2 rounded-[4px] bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-[inset_0_-2px_0_rgb(0_0_0/0.18)] transition hover:bg-indigo-700 active:translate-y-px active:shadow-none disabled:cursor-not-allowed disabled:opacity-60;
   }
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm font-medium text-slate-700 shadow-xs transition hover:border-slate-400 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-flex items-center justify-center gap-2 rounded-[4px] border border-slate-300 bg-white px-3.5 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-500 hover:text-slate-900 disabled:cursor-not-allowed disabled:opacity-60;
   }
   .section-title {
-    @apply text-base font-semibold tracking-tight text-slate-900;
+    @apply text-lg font-bold tracking-[-0.015em] text-slate-900;
+  }
+  /* Highlighter stroke: used only to mark the current step and the viewer's own work. */
+  .marker {
+    background-image: linear-gradient(transparent 12%, var(--color-marker) 12%, var(--color-marker) 88%, transparent 88%);
+    @apply -mx-1 rounded-[2px] px-1;
   }
 }

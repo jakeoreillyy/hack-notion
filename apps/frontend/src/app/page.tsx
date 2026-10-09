@@ -91,14 +91,14 @@ export default function InputPage() {
       <main className="mx-auto max-w-4xl px-4 pb-16 pt-10">
         <section className="flex flex-wrap items-end justify-between gap-6">
           <div className="max-w-2xl">
-            <p className="text-sm font-semibold text-indigo-600">For student group projects</p>
-            <h1 className="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+            <p className="text-sm font-medium text-slate-500">For student group projects</p>
+            <h1 className="mt-2 text-4xl leading-[1.02] text-slate-900 sm:text-[3.5rem]">
               Turn your assignment brief into a fair team plan.
             </h1>
-            <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-1.5 text-sm text-slate-600">
+            <ul className="mt-6 space-y-1.5 text-[0.95rem] text-slate-700">
               {PROMISES.map((p) => (
-                <li key={p} className="flex items-center gap-1.5">
-                  <span className="text-emerald-600">✓</span>
+                <li key={p} className="flex items-center gap-2.5">
+                  <Tick />
                   {p}
                 </li>
               ))}
@@ -109,15 +109,15 @@ export default function InputPage() {
               Fill with demo data
             </button>
             {!USE_MOCK && (
-              <Link href={`/projects/${DEMO_PROJECT_ID}`} className="text-xs font-medium text-indigo-600 hover:underline">
-                or open the ready-made MK301 demo →
+              <Link href={`/projects/${DEMO_PROJECT_ID}`} className="text-xs font-medium text-indigo-600 underline decoration-indigo-300 underline-offset-2 hover:decoration-indigo-600">
+                or open the ready-made MK301 demo
               </Link>
             )}
           </div>
         </section>
 
-        <form onSubmit={submit} className="mt-10 space-y-6" noValidate>
-          <section className="card p-6">
+        <form onSubmit={submit} className="mt-12 space-y-6" noValidate>
+          <section className="card sheet py-6 pr-6">
             <SectionHeading n={1} title="The assignment" hint="Paste the text straight from your module page." />
             <div className="mt-5 grid gap-5 md:grid-cols-2">
               <div>
@@ -165,10 +165,10 @@ export default function InputPage() {
             </div>
           </section>
 
-          <section className="card p-6">
+          <section className="card sheet py-6 pr-6">
             <div className="flex items-start justify-between gap-4">
               <SectionHeading n={2} title="The team" hint="Hours and days off decide how work is shared." />
-              <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600">
+              <span className="pt-1 text-sm text-slate-500">
                 {members.length} {members.length === 1 ? "member" : "members"}
               </span>
             </div>
@@ -188,7 +188,7 @@ export default function InputPage() {
               <button
                 type="button"
                 onClick={() => setMembers((ms) => [...ms, emptyMember()])}
-                className="w-full rounded-xl border-2 border-dashed border-slate-200 py-3 text-sm font-medium text-slate-500 transition hover:border-indigo-300 hover:bg-indigo-50/50 hover:text-indigo-700"
+                className="w-full rounded-[4px] border border-dashed border-slate-300 py-3 text-sm font-medium text-slate-500 transition hover:border-indigo-600 hover:text-indigo-700"
               >
                 + Add member
               </button>
@@ -196,7 +196,7 @@ export default function InputPage() {
           </section>
 
           {errors.length > 0 && (
-            <div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-800">
+            <div role="alert" className="rounded-[4px] border-l-4 border-margin bg-white px-5 py-4 text-sm text-red-800 shadow-[0_1px_0_var(--color-rule)]">
               <p className="font-semibold">Fix these before making the plan:</p>
               <ul className="mt-1.5 list-disc space-y-0.5 pl-5">
                 {errors.map((err) => (
@@ -206,7 +206,7 @@ export default function InputPage() {
             </div>
           )}
 
-          <div className="card flex flex-wrap items-center justify-between gap-4 px-6 py-4">
+          <div className="flex flex-wrap items-center justify-between gap-4 border-t-2 border-slate-900 pt-5">
             <p className="text-sm text-slate-500">Estimates are guesses. You can edit everything on the next screen.</p>
             <button type="submit" disabled={submitting} className="btn-primary px-6">
               {submitting ? (
@@ -214,7 +214,7 @@ export default function InputPage() {
                   <Spinner /> Making plan…
                 </>
               ) : (
-                <>Make draft plan →</>
+                <>Make draft plan</>
               )}
             </button>
           </div>
@@ -225,7 +225,7 @@ export default function InputPage() {
             <summary className="cursor-pointer text-slate-400 hover:text-slate-600">
               Developer: data this form sends (POST /api/projects)
             </summary>
-            <pre className="mt-2 overflow-x-auto rounded-xl bg-slate-900 p-4 text-xs text-slate-100">
+            <pre className="mt-2 overflow-x-auto rounded-[4px] bg-slate-900 p-4 text-xs text-slate-100">
               {JSON.stringify(req, null, 2)}
             </pre>
           </details>
@@ -237,8 +237,8 @@ export default function InputPage() {
 
 function SectionHeading({ n, title, hint }: { n: number; title: string; hint: string }) {
   return (
-    <div className="flex items-start gap-3">
-      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-indigo-50 text-sm font-semibold text-indigo-700">
+    <div>
+      <span className="in-margin top-5 text-2xl font-extrabold text-indigo-600" aria-hidden>
         {n}
       </span>
       <div>
@@ -246,6 +246,14 @@ function SectionHeading({ n, title, hint }: { n: number; title: string; hint: st
         <p className="mt-0.5 text-sm text-slate-500">{hint}</p>
       </div>
     </div>
+  );
+}
+
+function Tick() {
+  return (
+    <svg viewBox="0 0 16 16" className="h-4 w-4 shrink-0 text-indigo-600" fill="none" stroke="currentColor" strokeWidth="2.4" aria-hidden>
+      <path d="M2.5 8.5l3.5 3.5L13.5 3" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
   );
 }
 
