@@ -114,45 +114,48 @@ The roles only stay independent if two things are nailed down **before** anyone 
 
 > **For AI agents reading this file:** you are helping ONE team member. Work only in the folder your role owns, treat the contract as frozen, and flag any gap or conflict to your human before coding.
 
-### Stack (all TypeScript, decided)
+### Stack (one TypeScript app, decided)
 
-- **Server:** Node 20 with Hono, run with `tsx`, port 8000, CORS open.
-- **Shared types:** `zod` schemas in `packages/shared`, used by both the server and the web app. A type error means a contract mismatch.
-- **LLM:** one provider SDK, key in `LLM_API_KEY`, wrapped in `llm.ts`.
+- **Framework:** Next.js (App Router) with TypeScript. One app, one `npm run dev`, one deploy. Pages and API routes live together.
+- **Styling:** Tailwind CSS, with shadcn/ui components for tables, dialogs and toasts.
+- **Validation and shared types:** `zod` schemas in `src/lib/schemas.ts`, used by both API routes and pages. A type error means a contract mismatch.
+- **LLM:** one provider SDK, key in `LLM_API_KEY`, wrapped in `src/lib/llm.ts`.
 - **Notion:** `@notionhq/client`, token in `NOTION_TOKEN`, parent page in `NOTION_PARENT_PAGE_ID`.
-- **Web:** Lovable (React and TypeScript), exported to `apps/web`.
 - **State:** in-memory `Map` saved to `data/projects.json`. No database.
 - **Dates:** `YYYY-MM-DD`, weekdays only count as working days.
 
 ### Repo layout
 
-Each role owns files and does not edit another role's. The only shared files are `CONTRACT.md` and `packages/shared`, and those are frozen after the first 20 minutes.
+Each role owns files and does not edit another role's. The only shared files are `CONTRACT.md` and `src/lib/schemas.ts`, and those are frozen after the first 20 minutes.
 
 ```
-/packages/shared/src
-  schemas.ts                 # Role 2: zod types for everything in CONTRACT.md
+/src/lib                          # server logic, plain TypeScript
+  schemas.ts                      # Role 2: zod types for everything in CONTRACT.md
+  llm.ts                          # Role 1: LLM wrapper returning validated JSON
+  extract.ts                      # Role 1: brief -> criteria, deliverables
+  decompose.ts                    # Role 1: deliverables -> tasks
+  notifications.ts                # Role 1: which tasks need a dashboard notification
+  scheduler.ts                    # Role 2: assign + backward schedule
+  analysis.ts                     # Role 2: load, coverage, risks
+  replan.ts                       # Role 2: constraint change -> proposal
+  store.ts                        # Role 2: state and persistence
+  notionSync.ts                   # Role 4: create workspace, update rows
+  fixtures/                       # Role 2: hand-written tasks.json and project.json
 
-/apps/server/src
-  llm.ts                     # Role 1: LLM wrapper returning validated JSON
-  extract.ts                 # Role 1: brief -> criteria, deliverables
-  decompose.ts               # Role 1: deliverables -> tasks
-  notifications.ts           # Role 1: which tasks need a dashboard notification
-  scheduler.ts               # Role 2: assign + backward schedule
-  analysis.ts                # Role 2: load, coverage, risks
-  replan.ts                  # Role 2: constraint change -> proposal
-  store.ts  routes.ts        # Role 2: state and all endpoints
-  notionSync.ts              # Role 4: create workspace, update rows
-  fixtures/                  # Role 2: hand-written tasks.json and project.json
+/src/app/api                      # Role 2: route handlers for every endpoint in CONTRACT.md
 
-/apps/web                    # Role 3 (Lovable project exported to repo)
-  mock/response.json         # hand-written example matching CONTRACT.md
+/src/app                          # Role 3: pages
+  page.tsx                        #   input page
+  projects/[id]/page.tsx          #   plan review and dashboard
+/src/components                   # Role 3
+/mock/response.json              # Role 3: hand-written example matching CONTRACT.md
 
 /demo
   brief_mk301.txt  rubric_mk301.txt  team.json    # Role 5
   brief_essay.txt  brief_software.txt             # Role 5, extra test briefs
 
-CONTRACT.md                  # frozen API shape, see below
-.env.example                 # variable names only
+CONTRACT.md                       # frozen API shape, see below
+.env.example                      # variable names only
 ```
 
 ### Git workflow
@@ -254,7 +257,7 @@ Response (called **PlanView** below):
 - A task creates a notification when `status !== "done"`, it has an owner, and `due` is within 2 days of today or past.
 - The replan explanation is a template filled from `changes`, so it cannot invent facts.
 - A member is overloaded when planned hours exceed `hoursPerWeek` times working weeks to the deadline, minus `hoursPerWeek / 5` per blocked weekday.
-- Role 3 builds against `mock/response.json` until the real endpoints exist, then swaps the base URL.
+- Role 3 builds against `mock/response.json` until the real endpoints exist, then switches to calling `/api/...`.
 
 ### Function interfaces between modules
 
@@ -289,7 +292,7 @@ Role 2 and Role 4 develop against the hand-written fixtures until Role 1's real 
 - Replan diff with the explanation template
 - State and persistence
 
-### Role 3: web app (Lovable)
+### Role 3: web app (Next.js pages and components)
 
 - Input page: brief, rubric, deadline, members
 - Plan review page: editable task table, load bars, coverage gap banner, risks, **Confirm plan**
@@ -349,7 +352,7 @@ Steps 1 to 3 make a working demo. The replan with a visible diff is the best sec
 
 ## Before 2:20
 
-- Everyone sets up Lovable credits, an LLM API key, Node 20, and the Notion HQ.
+- Everyone sets up an LLM API key, Node 20, and the Notion HQ.
 - Role 4 creates a Notion integration with read and write access and shares the HQ page with it.
 - Role 5 writes the demo brief, rubric and team in the first 20 minutes. Everything else is tested against them.
 - Push the repo skeleton: the folders above, an empty `CONTRACT.md`, `.gitignore`, `.env.example`, and the five branches.
